@@ -1,0 +1,44 @@
+{
+  "name": "hrpc-blog",
+  "version": "1.0.0",
+  "description": "My new Blog",
+  "main": "start.js",
+  "scripts": {
+    "start": "node --harmony start.js",
+    "dev": "NODE_ENV=development node --harmony start.js",
+    "public": "NODE_ENV=production node --harmony start.js",
+    "test": "mocha test-example/index.js",
+    "pm": "NODE_ENV=production pm2 start entry.js --name='blogServer'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hrpc/my-blog.git"
+  },
+  "keywords": [
+    "blog"
+  ],
+  "author": "hrpc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hrpc/my-blog/issues"
+  },
+  "homepage": "https://github.com/hrpc/my-blog#readme",
+  "devDependencies": {},
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "jsonwebtoken": "^8.1.0",
+    "koa": "^2.4.1",
+    "koa-bodyparser": "^4.2.0",
+    "koa-json": "^2.0.2",
+    "koa-logger": "^3.1.0",
+    "koa-router": "^7.3.0",
+    "koa2-cors": "^2.0.5",
+    "mongoose": "^4.13.6"
+  }
+}
