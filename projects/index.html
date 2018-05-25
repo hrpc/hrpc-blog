@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Tips</title>
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+				box-sizing: border-box;
+			}
+			.wrapper{
+				padding: 15px 25px;
+				min-height: 100vh;
+				background-color: #EEEEEE;
+				overflow: hidden;
+			}
+			.wrapper h1{
+				text-align: center;
+			}
+			.wrapper .main{
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+			.wrapper .main-input{
+				font-size: 18px;
+				outline: none;
+				border: none;
+				padding: 10px;
+			}
+			.wrapper button{
+				font-size: 18px;
+			}
+			.inputs{
+				margin: 30px 0;
+			}
+			.tips{
+				display: flex;
+				flex-wrap: wrap;
+				width: 100%;
+			}
+			.tips .tip{
+				height: 100px;
+				background-color: rgba(67,205,128,.5);
+				box-shadow: 10px 10px rgba(105,105,105,.5);
+				margin-right: 25px;
+				margin-bottom: 25px;
+				flex: 1 1 200px;
+				transform: translateX(400px);
+				color: #333;
+				border-radius: 8px;
+				padding: 10px;
+				animation: showtips 0.5s linear forwards;
+			}
+			.tips .tip:hover{
+				background-color: rgba(67,205,128,1);
+			}
+			.tips .current{
+				background-color: rgba(67,205,128,1);
+				color: #fff;
+			}
+			@keyframes showtips{
+				0{
+					transform: translateX(400px);
+					opacity: 1;
+				}
+				50%{
+					transform: translateX(200px);
+					opacity: 0;
+				}
+				100%{
+					transform: translateX(0);
+					opacity: 1;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrapper">
+			<h1>Tips</h1>
+			<div class="main">
+				<div class="inputs">
+					<input type="text" placeholder="点击输入新的Tip" class="main-input"/>
+					<button class="addone">添加新的Tip</button>
+					<button class="randomone">随机一个Tip</button>
+					<!--<button class="showall">显示所有Tip</button>-->
+				</div>
+				<div class="tips">
+					
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			let origin_arr = ["css选择符优先级"]
+			const input = document.querySelector(".main-input")
+			const addone = document.querySelector(".addone")
+			const randomone = document.querySelector(".randomone")
+//			const showall = document.querySelector(".showall")
+			const tips = document.querySelector(".tips")
+			//监听input事件
+			input.addEventListener("input",function(e){
+				console.log(e.target.value)
+			},false)
+			//监听addone点击
+			addone.addEventListener('click',function(e){
+				const inputValue = input.value
+				if(inputValue && origin_arr.indexOf(inputValue) < 0){
+					origin_arr.push(inputValue)
+					saveToLocalStorage()
+					//向页面中添加单个tip
+					tips.appendChild(createTip(inputValue))
+				}
+			},false)
+//			showall.addEventListener('click',showAll,false)
+			randomone.addEventListener('click',randomShowOne,false)
+			function saveToLocalStorage(){
+				let saveValue = origin_arr.join("/")
+				localStorage.setItem("tips",saveValue)
+			}
+			function getDataFromStorage(){
+				let data = localStorage.getItem("tips")
+				//字符串转化为数组
+				origin_arr = data ? data.split("/") :origin_arr
+			}
+			//创建节点
+			function createTip(arr){
+				//创建文档片段
+				const fragment = document.createDocumentFragment()
+				if(arr instanceof Array){
+					arr.forEach(item => {
+						const div = document.createElement("div")
+						div.className = "tip"
+						div.textContent = item
+						fragment.appendChild(div)
+					})
+				}else{
+					const div = document.createElement("div")
+					div.className = "tip";
+					div.textContent = arr
+					fragment.appendChild(div)
+				}
+				return fragment
+			}
+			function showAll(){
+//				const tips = document.querySelectorAll(".tips .tip")
+//				tips.forEach(item => {
+//					item.classList.add('current')
+//				})
+			}
+			//随机显示一个tip
+			function randomShowOne(){
+				const tips = document.querySelectorAll(".tips .tip")
+				const length = tips.length
+				let count = 20
+				let timer = 30
+				//取得随机数组下标
+				const randomIndex = Math.floor((Math.random() * length))
+				//先移除所有元素的current
+//				tips.forEach(item => {
+//					item.classList.remove('current')
+//				})
+//				tips[randomIndex].classList.add("current")
+				if(length > 1){
+					animateCurrent(tips,timer,count)
+				}
+			}
+			function animateCurrent(tips,timer,count){
+				if(count != 0){
+					let timeout = setTimeout(function(){
+						//取得随机数组下标
+						const length = tips.length
+						const randomIndex = Math.floor((Math.random() * length))
+						//先移除所有元素的current
+						tips.forEach(item => {
+							if(item.classList.contains('current')){
+								item.classList.remove('current')
+							}
+						})
+						tips[randomIndex].classList.add("current")
+						count--
+						timer += 10
+						clearTimeout(timeout)
+						animateCurrent(tips,timer,count)
+					},timer)
+				}else{
+					return
+				}
+			}
+			window.onload = function(){
+				getDataFromStorage()
+				const fragment = createTip(origin_arr)
+				tips.appendChild(fragment)
+			}
+		</script>
+	</body>
+</html>
